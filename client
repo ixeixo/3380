@@ -1,0 +1,17 @@
+import socket
+
+server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  # AF_INET = IP, SOCK_STREAM = TCP
+server.bind(('localhost', 2000))  # 127.0.0.1
+server.listen()
+
+hash_socket, hash_address = server.accept()
+
+file = open('IMG_0683.JPG', "wb")
+image_packet = hash_socket.recv(2048)  # stream-based protocol
+
+while image_packet:
+    file.write(image_packet)
+    image_packet = hash_socket.recv(2048)
+
+file.close()
+hash_socket.close()
