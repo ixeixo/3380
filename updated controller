@@ -1,0 +1,15 @@
+from model2 import Sendtohashie
+from view import View
+
+
+class Controller:
+
+    def __init__(self):
+        self.model = Sendtohashie()
+        self.view = View()
+        pass
+
+     if self.view.hashify_button:
+
+    def buttonCLick(self, filename):
+        self.model(filename)
