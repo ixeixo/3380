@@ -3,14 +3,13 @@ import sys
 import os
 import time
 import hashlib
-import collections
-import collections.abc
+from collections import defaultdict
 
 
 def is_image(file):
     fileidentifier = file.lower()
     return fileidentifier.endswith(".png") or fileidentifier.endswith(".jpg") or \
-        fileidentifier.endswith(".jpeg") or '.jpg' in f \
+        fileidentifier.endswith(".jpeg") or '.jpg' in fileidentifier \
 
 
 def cryptohashingfunction(file):
@@ -25,65 +24,103 @@ def cryptohashingfunction(file):
                 sha256.update(data)
         return sha256.hexdigest()
     else:
-        raise TypeError("The selected file is not an acceptable file type.")
+        raise TypeError("The selected file is not an acceptable file type. Only .png, .jpg, and .jpeg are allowed.")
+        
 
-count = 0
-hashesdict = collections.defaultdict(dict)
-hashesdict[f'Hash {count}']['Hash']
-updatedhashdict = {'Hashes': {}}
-filename1 = 'hashdictionary.json'
 comparison_hash = cryptohashingfunction(file)
+filename1 = 'hashdictionary.json'
+hashesdict = defaultdict(lambda: defaultdict(lambda: defaultdict(list)))
+
 
 if os.path.isfile(filename1):
-    with (open(filename1, "r+")) as openfile:
+    with (open(filename1)) as openfile:
         while True:
             try:
-                updatedhashdict.update(json.load(filename1))
+                hashesdict.update(json.load(openfile))
+                break
             except EOFError:
                 break
-                
-while count < len(hashesdict):
-    if hashesdict[f'Hash {count}']['Hash'] == comparison_hash:
-        print("Your hashed image has a match in our dictionary. Here is the info on this hash: ")
-        if hashesdict.get(f'Hash{count}', {}).get('Info') == 'None':
-            while True:
-                infoaddition = input("There is no info on this image. Would you like to add additional info?")
-                if infoaddition.strip() == 'yes' or 'Yes':
-                    info = input("Please provide additional info about the image: ")
-                    hashesdict[f'Hash {count}']['Info'] = info
-                    print("Hash info successfully added to dictionary.")
-                    break
-                elif infoaddition.strip() == 'no' or 'No':
-                    print("No additional info will be added.")
-                    break
-                else:
-                    print("Error: Response is not valid. The following responses are valid: yes, Yes, no, No")
-                    time.sleep(3)
+
+
+def match(comparison_hash):
+    matching_hash = comparison_hash
+    try:
+        match_decision = find_matching_hash(hashesdict, matching_hash)
+    except ValueError:
+        return None
+    return match_decision
+
+
+def find_matching_hash(hashesdict, matching_hash):
+    count1 = 0
+    for j in range(len(hashesdict["Hashmap"]['Hashes']['Hash'])):
+        if matching_hash == hashesdict["Hashmap"]['Hashes']['Hash'][j]:
+            return True
         else:
-            print(hashesdict[f'Hash {count}']['Info'])
-            break
+            count1 = count1 + 1
+    if count1 == len(hashesdict["Hashmap"]['Hashes']['Hash']):
+        return False
 
+
+matcher = match(comparison_hash)
+
+
+def items_in(d):
+    items = []
+    if isinstance(d, list):
+        items.extend(d)
+    elif isinstance(d, dict):
+        for k, v in d.items():
+            res.extend([k] * len(items_in(v)))
     else:
-        count = count + 1
+        raise ValueError('Unknown data')
+    return items
 
- if count == len(hashesdict):
-    print("There are no matching hashes for your image within the dictionary.")
-    print("Adding hash to the dictionary... please wait for 5 seconds.")
-    hashesdict[f'Hash {count}']['Hash'] = comparison_hash
+if matcher is False:
+    print("The image hash cannot be found in the dictionary.")
+    print("Adding hash to dictionary...please wait for 5 seconds")
+    hashesdict['Hashmap']['Hashes']['Hash'].append(comparison_hash)
     time.sleep(5)
     while True:
         decision = input("Would you like to add info about this image?")
-        if decision.strip() == 'yes' or 'Yes':
+        if decision.strip().lower() == "yes":
             info = input("Please provide additional info about the image: ")
-            hashesdict[f'Hash {count}']['Info'] = info
+            hashesdict['Hashmap']['Hashes']['Info'].append(info)
             print("Hash and hash info successfully added to dictionary.")
             break
-        elif decision.strip() == 'no' or 'No':
-            print("No additional info will be provided. Hash successfully added to dictionary.")
+        elif decision.strip().lower() == "no":
+            hashesdict['Hashmap']['Hashes']['Info'].append("None")
+            print("No additional info will be added. Hash successfully added to dictionary.")
             break
+else:
+    proof = items_in(hashesdict['Hashmap']['Hashes']['Hash'])
+    length = len(proof)
+    for i in range(length):
+        if comparison_hash != proof[i]:
+            continue
         else:
-            print("Error: Response is not valid. The following responses are valid: yes, Yes, no, No")
-            time.sleep(3)
+            print("The requested hash has been found in the dictionary.")
+            print("Sending info about the image correlated to the hash...")
+            if hashesdict['Hashmap']['Hashes']['Info'][i] == "None":
+                print("There seems to be no information about this hash.")
+                decision = input("Would you like to give information about this hash?")
+                if decision.strip().lower() == "yes":
+                    info = input("Please provide additional info about the image: ")
+                    print("Adding info to dictionary...")
+                    hashesdict['Hashmap']['Hashes']['Info'].append(info)
+                    time.sleep(3)
+                    print("Hash and hash info successfully added to dictionary.")
+                    break
+                else:
+                    print("No additional info will be added.")
+            else:
+                with open("SelectedHashInfo.txt", "w+") as text:
+                    data = text.read()
+                    text.seek(0)
+                    text.write(hashesdict['Hashmap']['Hashes']['Info'][i])
+                    text.truncate()
+                    
+
 
 with open(filename1, 'w') as f:
     json.dump(updatedhashdict, f)
