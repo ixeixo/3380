@@ -1,0 +1,13 @@
+from model2 import Send
+
+import socket
+
+
+def Sendit(filename):
+    Send(filename)
+
+
+class Controller:
+    def __init__(self, model, view):
+        self.model = model
+        self.view = view
