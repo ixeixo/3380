@@ -76,50 +76,46 @@ def items_in(d):
         raise ValueError('Unknown data')
     return items
 
-if matcher is False:
-    print("The image hash cannot be found in the dictionary.")
-    print("Adding hash to dictionary...please wait for 5 seconds")
-    hashesdict['Hashmap']['Hashes']['Hash'].append(comparison_hash)
-    time.sleep(5)
-    while True:
-        decision = input("Would you like to add info about this image?")
-        if decision.strip().lower() == "yes":
-            info = input("Please provide additional info about the image: ")
-            hashesdict['Hashmap']['Hashes']['Info'].append(info)
-            print("Hash and hash info successfully added to dictionary.")
-            break
-        elif decision.strip().lower() == "no":
-            hashesdict['Hashmap']['Hashes']['Info'].append("None")
-            print("No additional info will be added. Hash successfully added to dictionary.")
-            break
-else:
-    proof = items_in(hashesdict['Hashmap']['Hashes']['Hash'])
-    length = len(proof)
-    for i in range(length):
-        if comparison_hash != proof[i]:
-            continue
-        else:
-            print("The requested hash has been found in the dictionary.")
-            print("Sending info about the image correlated to the hash...")
-            if hashesdict['Hashmap']['Hashes']['Info'][i] == "None":
-                print("There seems to be no information about this hash.")
-                decision = input("Would you like to give information about this hash?")
-                if decision.strip().lower() == "yes":
-                    info = input("Please provide additional info about the image: ")
-                    print("Adding info to dictionary...")
-                    hashesdict['Hashmap']['Hashes']['Info'].append(info)
-                    time.sleep(3)
-                    print("Hash and hash info successfully added to dictionary.")
-                    break
-                else:
-                    print("No additional info will be added.")
+def sendhashinfo(hashesdict):
+    if matcher is False:
+        print("The image hash cannot be found in the dictionary.")
+        print("Adding hash to dictionary...please wait for 5 seconds")
+        hashesdict['Hashmap']['Hashes']['Hash'].append(comparison_hash)
+        time.sleep(5)
+        while True:
+            decision2 = input("Would you like to add info about this image?")
+            if decision2.strip().lower() == "yes":
+                info2 = input("Please provide additional info about the image: ")
+                print("Adding info to dictionary...")
+                hashesdict['Hashmap']['Hashes']['Info'].append(info2)
+                time.sleep(3)
+                return hashesdict['Hashmap']['Hashes']['Info'].append(info2)
+
+            elif decision2.strip().lower() == "no":
+                hashesdict['Hashmap']['Hashes']['Info'].append("None")
+                return "No additional info will be added. Hash successfully added to dictionary."
+
+    else:
+        proof = items_in(hashesdict['Hashmap']['Hashes']['Hash'])
+        length = len(proof)
+        for i in range(length):
+            if comparison_hash != proof[i]:
+                continue
             else:
-                with open("SelectedHashInfo.txt", "w+") as text:
-                    data = text.read()
-                    text.seek(0)
-                    text.write(hashesdict['Hashmap']['Hashes']['Info'][i])
-                    text.truncate()
-                    
+                print("The requested hash has been found in the dictionary.")
+                print("Sending info about the image correlated to the hash...")
+                if hashesdict['Hashmap']['Hashes']['Info'][i] == "None":
+                    print("There seems to be no information about this hash.")
+                    decision = input("Would you like to give information about this hash?")
+                    if decision.strip().lower() == "yes":
+                        info = input("Please provide additional info about the image: ")
+                        hashesdict['Hashmap']['Hashes']['Info'][i] = info
+                        return hashesdict['Hashmap']['Hashes']['Info'][i]
+
+                    else:
+                        return "No additional info will be added."
+                else:
+                    return hashesdict['Hashmap']['Hashes']['Info'][i]
 
 
 with open(filename1, 'w') as f:
