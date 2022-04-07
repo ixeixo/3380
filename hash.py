@@ -633,7 +633,7 @@ import time
 from collections import defaultdict
 
 
-
+gui_to_file = 
 targetfile = Image.open(str(file), 'r')
 
 
