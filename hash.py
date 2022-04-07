@@ -701,9 +701,7 @@ def items_in(d):
     return items
 
 def sendhashinfo(hashesdict):
-    if matcher is False:
-        print("The image hash cannot be found in the dictionary.")
-        print("Adding hash to dictionary...please wait for 5 seconds")
+    if matcher is False: 
         hashesdict['Hashmap']['Hashes']['Hash'].append(comparison_hash)
         time.sleep(5)
         while True:
@@ -715,7 +713,7 @@ def sendhashinfo(hashesdict):
                 return hashesdict['Hashmap']['Hashes']['Info'].append(info2)
 
             elif decision2.strip().lower() == "no":
-                hashesdict['Hashmap']['Hashes']['Info'].append("None")
+                hashesdict['Hashmap']['Hashes']['Info'].append(None)
                 return "No additional info will be added. Hash successfully added to dictionary."
 
     else:
@@ -725,9 +723,7 @@ def sendhashinfo(hashesdict):
             if comparison_hash != proof[i]:
                 continue
             else:
-                print("The requested hash has been found in the dictionary.")
-                print("Sending info about the image correlated to the hash...")
-                if hashesdict['Hashmap']['Hashes']['Info'][i] == "None":
+                if hashesdict['Hashmap']['Hashes']['Info'][i] is None:
                     print("There seems to be no information about this hash.")
                     decision = input("Would you like to give information about this hash?")
                     if decision.strip().lower() == "yes":
