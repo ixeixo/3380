@@ -633,8 +633,8 @@ import time
 from collections import defaultdict
 
 
-
-targetfile = Image.open(str(file), 'r')
+gui_to_file = 
+targetfile = Image.open(str(gui_to_file), 'r')
 
 
 def is_image(file):
