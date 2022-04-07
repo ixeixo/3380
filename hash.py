@@ -742,7 +742,19 @@ def sendhashinfo(hashesdict):
                 
 
 sendhashinfo(hashesdict)
-                
+ 
+    
+convertsave_hashdict = json.dumps(hashesdict)
+revertsave_hashdict = json.loads(convertsave_hashdict)
                 
 with open(filename1, 'w') as f:
     json.dump(hashesdict, f)
+    
+with open('/dev/file.txt', 'w') as savefile:
+    savefile.write(convertsave_hashdict)
+
+
+
+
+          
+
