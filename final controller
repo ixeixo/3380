@@ -1,0 +1,35 @@
+import socket
+import threading
+
+
+class Controller:
+    def __init__(self, view):
+        self.file = None
+        self.view = view
+        self.fileName = ''
+        self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  # AF_INET = IP, SOCK_STREAM = TCP
+        self.client.connect(('localhost', 2000))  # 127.0.0.1
+
+        # gui_thread = threading.Thread(target=self.gui_loop)
+        # receive_Thread = threading.Thread(target=self.receive)
+
+        # gui_thread.start()
+        # receive_Thread.start()
+
+    def SendFile(self, fileName):
+        self.file = open(fileName, 'rb')
+        self.image_data = self.file.read(2048)
+
+        while self.image_data:
+            self.client.send(self.image_data)
+            self.image_data = self.file.read(2048)
+
+        self.file.close()
+
+    def take(self):
+        self.file = open('input.txt', 'wb')
+        while True:
+            data = self.client.recv(2048)
+            self.file.write(data)
+        self.file.close()
+        return self.file
