@@ -1,8 +1,10 @@
 import tkinter as tk
+from tkinter import *
 
 from MVC.Model import Model
 from MVC.View import View
 from MVC.Controller import Controller
+
 
 
 
@@ -24,3 +26,7 @@ class App(tk.Tk):
 
         # set the controller to view
         view.set_controller(controller)
+
+
+        icn = PhotoImage(file = 'icn.png')
+        self.iconphoto(False,icn)
