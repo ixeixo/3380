@@ -715,7 +715,7 @@ def sendhashinfo(hashesdict):
                 return hashesdict['Hashmap']['Hashes']['Info'].append(info2)
 
             elif decision2.strip().lower() == "no":
-                hashesdict['Hashmap']['Hashes']['Info'].append("None")
+                hashesdict['Hashmap']['Hashes']['Info'].append(None)
                 return "No additional info will be added. Hash successfully added to dictionary."
 
     else:
@@ -727,7 +727,7 @@ def sendhashinfo(hashesdict):
             else:
                 print("The requested hash has been found in the dictionary.")
                 print("Sending info about the image correlated to the hash...")
-                if hashesdict['Hashmap']['Hashes']['Info'][i] == "None":
+                if hashesdict['Hashmap']['Hashes']['Info'][i] is None:
                     print("There seems to be no information about this hash.")
                     decision = input("Would you like to give information about this hash?")
                     if decision.strip().lower() == "yes":
@@ -745,4 +745,4 @@ sendhashinfo(hashesdict)
                 
                 
 with open(filename1, 'w') as f:
-    json.dump(updatedhashdict, f)
+    json.dump(hashesdict, f)
