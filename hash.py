@@ -640,13 +640,13 @@ from collections import defaultdict
 # Opens the image file that was transferred for hashing
 targetfile = Image.open(str(file), 'r')
 
-# Defines is the image is an acceptable file 
+# Determines if the image is an acceptable file 
 def is_image(file):
     fileidentifier = str(file).lower()
     return fileidentifier.endswith(".png") or fileidentifier.endswith(".jpg") or \
         fileidentifier.endswith(".jpeg") or '.jpg' in fileidentifier \
 
-# Hashing functiion for the image file
+# Hashing function for the image file
 def cryptohashingfunction(file):
     hashverification = is_image(file)
     if hashverification:
@@ -695,7 +695,7 @@ with open('/dev/file.txt', 'w') as savefile:
     savefile.write(convertsave_hashdict)
     
 comparison_hash = cryptohashingfunction(targetfile).__str__() #Variable for storing the hash, then converting it to a string object. 
-filename1 = 'hashdictionary.json' #File for data preservation.
+filename1 = 'hashdictionary.json' #File for secondary data preservation/comparison .
 matcher = match(comparison_hash) #Boolean for comparison use. 
 
 # Determines the items that are in the selected key within the dictionary. 
