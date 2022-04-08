@@ -638,7 +638,7 @@ from collections import defaultdict
 
 
 # Opens the image file that was transferred for hashing
-targetfile = Image.open(str(file), 'r')
+targetfile = Image.open(file, 'r')
 
 # Determines if the image is an acceptable file 
 def is_image(file):
@@ -658,7 +658,7 @@ def cryptohashingfunction(file):
 hashesdict = defaultdict(lambda: defaultdict(lambda: defaultdict(list)))
 
 # Does not run on the first execution
-# Opens the file to update the hash dictionary
+# Opens the json file to update the hash dictionary
 if os.path.isfile(filename1):
     with (open(filename1)) as openfile:
         while True:
