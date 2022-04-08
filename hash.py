@@ -631,14 +631,14 @@ import json
 import os
 import time
 from collections import defaultdict
-import socket
+
 
 
 
 
 
 # Opens the image file that was transferred for hashing
-targetfile = Image.open(str(gui_to_file), 'r')
+targetfile = Image.open(str(file), 'r')
 
 # Defines is the image is an acceptable file 
 def is_image(file):
