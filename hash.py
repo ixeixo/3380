@@ -4,35 +4,37 @@ Image hashing library
 
 Example:
 
->>> from PIL import Image
->>> import imagehash
->>> hash = imagehash.average_hash(Image.open('test.png'))
->>> print(hash)
+from PIL import Image
+import imagehash
+hash = imagehash.average_hash(Image.open('test.png'))
+print(hash)
 d879f8f89b1bbf
->>> otherhash = imagehash.average_hash(Image.open('other.bmp'))
->>> print(otherhash)
+otherhash = imagehash.average_hash(Image.open('other.bmp'))
+print(otherhash)
 ffff3720200ffff
->>> print(hash == otherhash)
+print(hash == otherhash)
 False
->>> print(hash - otherhash)
+print(hash - otherhash)
 36
->>> for r in range(1, 30, 5):
-...     rothash = imagehash.average_hash(Image.open('test.png').rotate(r))
-...     print('Rotation by %d: %d Hamming difference' % (r, hash - rothash))
-...
+for r in range(1, 30, 5):
+    rothash = imagehash.average_hash(Image.open('test.png').rotate(r))
+    print('Rotation by %d: %d Hamming difference' % (r, hash - rothash))
+
 Rotation by 1: 2 Hamming difference
 Rotation by 6: 11 Hamming difference
 Rotation by 11: 13 Hamming difference
 Rotation by 16: 17 Hamming difference
 Rotation by 21: 19 Hamming difference
 Rotation by 26: 21 Hamming difference
->>>
+
 """
 
 from __future__ import (absolute_import, division, print_function)
 
 from PIL import Image, ImageFilter
 import numpy
+
+
 
 # import scipy.fftpack
 # import pywt
@@ -632,13 +634,12 @@ import os
 import time
 from collections import defaultdict
 
-
-
-
-
+import MVC.View
+print(MVC.View.fileName)
+targetfile = Image.open(MVC.View.fileName, 'r')
 
 # Opens the image file that was transferred for hashing
-targetfile = Image.open(file, 'r')
+
 
 # Determines if the image is an acceptable file 
 def is_image(file):
@@ -659,6 +660,7 @@ hashesdict = defaultdict(lambda: defaultdict(lambda: defaultdict(list)))
 
 # Does not run on the first execution
 # Opens the json file to update the hash dictionary
+filename1 = ''
 if os.path.isfile(filename1):
     with (open(filename1)) as openfile:
         while True:
@@ -691,8 +693,9 @@ def find_matching_hash(hashesdict, matching_hash):
 
 convertsave_hashdict = json.dumps(hashesdict)
 # Opens the text file to write in the converted hash dictionary for preservation.
-with open('/dev/file.txt', 'w') as savefile:
+with open('file.txt', 'w') as savefile:
     savefile.write(convertsave_hashdict)
+   
     
 comparison_hash = cryptohashingfunction(targetfile).__str__() #Variable for storing the hash, then converting it to a string object. 
 filename1 = 'hashdictionary.json' #File for secondary data preservation/comparison .
@@ -746,4 +749,3 @@ with open(filename1, 'w') as f:
 
 
           
-
