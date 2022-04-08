@@ -677,7 +677,7 @@ def match(comparison_hash):
         return None
     return match_decision
 
-# Find the matching hash and evalutes to True if successful. If not, returns False. 
+# Find the matching hash and evaluates to True if successful. If not, returns False. 
 def find_matching_hash(hashesdict, matching_hash):
     count1 = 0
     for j in range(len(hashesdict["Hashmap"]['Hashes']['Hash'])):
@@ -729,7 +729,9 @@ def sendhashinfo(hashesdict):
                     return hashesdict['Hashmap']['Hashes']['Info'][i]
                 
 
-sendhashinfo(hashesdict)
+info_to_gui = sendhashinfo(hashesdict)
+with open('hashinfo.txt', 'w') as hashinfo:
+    hashinfo.write(info_to_gui)
  
     
 revertsave_hashdict = json.loads(convertsave_hashdict)
