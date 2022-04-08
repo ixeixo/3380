@@ -27,6 +27,8 @@ class App(tk.Tk):
         # set the controller to view
         view.set_controller(controller)
 
+        def returnFileName():
+            return view.fileName
 
         icn = PhotoImage(file = 'icn.png')
         self.iconphoto(False,icn)
