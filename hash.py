@@ -631,18 +631,22 @@ import json
 import os
 import time
 from collections import defaultdict
+import socket
 
 
-gui_to_file = 
-targetfile = Image.open(str(file), 'r')
 
 
+
+# Opens the image file that was transferred for hashing
+targetfile = Image.open(str(gui_to_file), 'r')
+
+# Defines is the image is an acceptable file 
 def is_image(file):
     fileidentifier = str(file).lower()
     return fileidentifier.endswith(".png") or fileidentifier.endswith(".jpg") or \
         fileidentifier.endswith(".jpeg") or '.jpg' in fileidentifier \
 
-
+# Hashing functiion for the image file
 def cryptohashingfunction(file):
     hashverification = is_image(file)
     if hashverification:
@@ -650,12 +654,11 @@ def cryptohashingfunction(file):
     else:
         raise TypeError("The selected file is not an acceptable file type. Only .png, .jpg, and .jpeg are allowed.")
    
-
-comparison_hash = cryptohashingfunction(targetfile).__str__()
-filename1 = 'hashdictionary.json'
+# Creation of the hash dictionary, instantiated as a nested lambda dictionary
 hashesdict = defaultdict(lambda: defaultdict(lambda: defaultdict(list)))
 
-
+# Does not run on the first execution
+# Opens the file to update the hash dictionary
 if os.path.isfile(filename1):
     with (open(filename1)) as openfile:
         while True:
@@ -665,7 +668,7 @@ if os.path.isfile(filename1):
             except EOFError:
                 break
 
-
+# Returns a boolean of true if a match was found, or false if one hasn't. Returns None for value error.
 def match(comparison_hash):
     matching_hash = comparison_hash
     try:
@@ -674,7 +677,7 @@ def match(comparison_hash):
         return None
     return match_decision
 
-
+# Find the matching hash and evalutes to True if successful. If not, returns False. 
 def find_matching_hash(hashesdict, matching_hash):
     count1 = 0
     for j in range(len(hashesdict["Hashmap"]['Hashes']['Hash'])):
@@ -686,9 +689,16 @@ def find_matching_hash(hashesdict, matching_hash):
         return False
 
 
-matcher = match(comparison_hash)
+convertsave_hashdict = json.dumps(hashesdict)
+# Opens the text file to write in the converted hash dictionary for preservation.
+with open('/dev/file.txt', 'w') as savefile:
+    savefile.write(convertsave_hashdict)
+    
+comparison_hash = cryptohashingfunction(targetfile).__str__() #Variable for storing the hash, then converting it to a string object. 
+filename1 = 'hashdictionary.json' #File for data preservation.
+matcher = match(comparison_hash) #Boolean for comparison use. 
 
-
+# Determines the items that are in the selected key within the dictionary. 
 def items_in(d):
     items = []
     if isinstance(d, list):
@@ -700,24 +710,12 @@ def items_in(d):
         raise ValueError('Unknown data')
     return items
 
+# Sends the information about that hash, whether it is a match or not. 
 def sendhashinfo(hashesdict):
     if matcher is False:
-        print("The image hash cannot be found in the dictionary.")
-        print("Adding hash to dictionary...please wait for 5 seconds")
-        hashesdict['Hashmap']['Hashes']['Hash'].append(comparison_hash)
+        hashesdict['Hashmap']['Hashes']['Hash'].append(comparison_hash) #Adds hash to the end of the hash list. 
         time.sleep(5)
-        while True:
-            decision2 = input("Would you like to add info about this image?")
-            if decision2.strip().lower() == "yes":
-                info2 = input("Please provide additional info about the image: ")
-                print("Adding info to dictionary...")
-                time.sleep(3)
-                return hashesdict['Hashmap']['Hashes']['Info'].append(info2)
-
-            elif decision2.strip().lower() == "no":
-                hashesdict['Hashmap']['Hashes']['Info'].append(None)
-                return "No additional info will be added. Hash successfully added to dictionary."
-
+        return "There is no match for the hash in the dictionary. Hash has been added to dictionary."
     else:
         proof = items_in(hashesdict['Hashmap']['Hashes']['Hash'])
         length = len(proof)
@@ -725,18 +723,8 @@ def sendhashinfo(hashesdict):
             if comparison_hash != proof[i]:
                 continue
             else:
-                print("The requested hash has been found in the dictionary.")
-                print("Sending info about the image correlated to the hash...")
                 if hashesdict['Hashmap']['Hashes']['Info'][i] is None:
-                    print("There seems to be no information about this hash.")
-                    decision = input("Would you like to give information about this hash?")
-                    if decision.strip().lower() == "yes":
-                        info = input("Please provide additional info about the image: ")
-                        hashesdict['Hashmap']['Hashes']['Info'][i] = info
-                        return hashesdict['Hashmap']['Hashes']['Info'][i]
-
-                    else:
-                        return "No additional info will be added."
+                        return "There is no info about this hash."
                 else:
                     return hashesdict['Hashmap']['Hashes']['Info'][i]
                 
@@ -744,14 +732,13 @@ def sendhashinfo(hashesdict):
 sendhashinfo(hashesdict)
  
     
-convertsave_hashdict = json.dumps(hashesdict)
 revertsave_hashdict = json.loads(convertsave_hashdict)
                 
+
 with open(filename1, 'w') as f:
     json.dump(hashesdict, f)
     
-with open('/dev/file.txt', 'w') as savefile:
-    savefile.write(convertsave_hashdict)
+
 
 
 
