@@ -6,7 +6,9 @@ from PIL import ImageTk,Image
 from datetime import date
 from datetime import datetime
 
-fileName = ""
+
+
+
 
 class View(ttk.Frame):
     def __init__(self, parent):
@@ -18,12 +20,16 @@ class View(ttk.Frame):
         self.frameCanvas.grid(row=1, column=0)
         self.frameDetails = Frame(self)
         self.frameDetails.grid(row=2, column=0)
+        self.frameMatchDetails = Frame(self)
+        self.frameMatchDetails.grid(row=2, column=0)
         
+        self.outputUIPresent = False
+        self.inputUIPresent = False
 
         # set window title
         self.winfo_toplevel().title("Image Hashing Program")
 
-
+        fileName = ''
 
         # create widgets
         # label
@@ -48,7 +54,7 @@ class View(ttk.Frame):
         #  create empty image
         self.displayPreviewImage = ttk.Label(self.frameCanvas)
 
-
+        self.fileName = ''
          
         # FUNCTIONS
 
@@ -60,13 +66,41 @@ class View(ttk.Frame):
         # hashify button
     def hashify_button_clicked(self):
         self.Controller.SendFile(self.fileName)
-        # <Insert Hash Call>
+        
+       
+        
+        
         
         # Get matchfound result and replace the "false" below
         if(False):
             # Match Found
             self.hashifyStatusLabel.configure(text="Image has been hashed. Match found!")
-        
+            self.readMatchInfo()
+            # name
+            self.imageNameMatch = ttk.Label(self.frameDetails, text="Image Name: ")
+            self.imageNameMatch.grid(row=1, column=1, padx=5, sticky='w')
+            self.imageNameInputMatch = ttk.Label(self.frameDetails, text="")
+            self.imageNameInputMatch.grid(row=1, column=2, padx=5, pady=5)
+            # date
+            self.imageDateMatch = ttk.Label(self.frameDetails, text="Date:")
+            self.imageDateMatch.grid(row=2, column=1, padx=5, sticky='w')
+            self.imageDateLabelMatch = ttk.Label(self.frameDetails, text=date.today().strftime("%m/%d/%y"))
+            self.imageDateLabelMatch.grid(row=2, column=2, padx=5, pady=5, sticky='w')
+            self.outDate = date.today().strftime("%m/%d/%y")
+            # time
+            self.imageTimeMatch = ttk.Label(self.frameDetails, text="Time:")
+            self.imageTimeMatch.grid(row=3, column=1, padx=5, sticky='w')
+            self.imageTimeLabelMatch = ttk.Label(self.frameDetails, text=datetime.now().strftime("%H:%M:%S"))
+            self.imageTimeLabelMatch.grid(row=3, column=2, padx=5, pady=5, sticky='w')
+            self.outTime = datetime.now().strftime("%H:%M:%S")
+            # description
+            self.imageDescriptionMatch = ttk.Label(self.frameDetails, text="Description:")
+            self.imageDescriptionMatch.grid(row=4, column=1, padx=5, sticky='nw')
+            self.imageDescriptionInputMatch = ttk.Label(self.frameDetails, text="")
+            self.imageDescriptionInputMatch.grid(row=4, column=2, padx=5, pady=5)
+            
+            self.outputUIPresent = True
+
         else:
             # Match Not Found
             self.hashifyStatusLabel.configure(text="Image has been hashed. No match found, please add additional information below.")
@@ -104,7 +138,14 @@ class View(ttk.Frame):
             self.appendInfoLabel = ttk.Label(self.frameDetails, text=' ', wraplength=400)
             self.appendInfoLabel.grid(row=6, column=2, padx=5, pady=5)
 
+            self.inputUIPresent = True
 
+    def readMatchInfo(self):
+        matchFile = open('../testFile.txt', 'r')
+        thing1 = matchFile.readline()
+        thing2 = matchFile.readline()
+        thing3 = matchFile.readline()
+        thing4 = matchFile.readline()
 
        
 
@@ -149,8 +190,39 @@ class View(ttk.Frame):
         self.displayPreviewImage.config(text='Image Preview', width=100, image=self.previewImage)
         self.displayPreviewImage.image = self.previewImage
         self.displayPreviewImage.grid(row=4, column=2, pady=30)
+        
+        if(self.outputUIPresent):
+            self.destroyOutputDetails()
+            self.outputUIPresent = False
+        elif(self.inputUIPresent):
+            self.destroyInputDetails()
+            self.inputUIPresent = False
+
 
         
 
+    def destroyOutputDetails(self):
+        self.imageNameMatch.destroy()
+        self.imageNameInputMatch.destroy()
+        self.imageDateMatch.destroy()
+        self.imageDateLabelMatch.destroy()
+        self.imageTimeMatch.destroy()
+        self.imageTimeLabelMatch.destroy()
+        self.imageDescriptionMatch.destroy()
+        self.imageDescriptionInputMatch.destroy()
+        
+
+    def destroyInputDetails(self):
+        self.imageName.destroy()
+        self.imageNameInput.destroy()
+        self.imageDate.destroy()
+        self.imageDateLabel.destroy()
+        self.imageTime.destroy()
+        self.imageTimeLabel.destroy()
+        self.imageDescription.destroy()
+        self.imageDescriptionInput.destroy()
+        self.appendInfo_button.destroy()
+        self.appendInfoLabel.destroy()
 
         
+
