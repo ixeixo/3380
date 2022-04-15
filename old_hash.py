@@ -660,7 +660,7 @@ hashesdict = defaultdict(lambda: defaultdict(lambda: defaultdict(list)))
 
 # Does not run on the first execution
 # Opens the json file to update the hash dictionary
-filename1 = ''
+
 if os.path.isfile(filename1):
     with (open(filename1)) as openfile:
         while True:
