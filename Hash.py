@@ -677,9 +677,27 @@ class Hash():
         self.hashesdict = defaultdict(lambda: defaultdict(lambda: defaultdict(list)))
 
         
+        
+
+
+        
+
+
+
+
+    def startHash(self):
+        self.fileName = self.Controller.GetFile()
+        print("This is our filename: " + self.fileName)
+        targetfile = Image.open(self.fileName, 'r')
+        
+        
+        self.comparison_hash = cryptohashingfunction(targetfile).__str__() #Variable for storing the hash, then converting it to a string object. 
+        print(self.comparison_hash)
+        self.matcher = self.match(self.comparison_hash) #Boolean for comparison use. 
+        
         info_to_gui = self.sendhashinfo(self.hashesdict)
-        with open('hashinfo.txt', 'w') as hashinfo:
-            hashinfo.write(info_to_gui)
+        #with open('hashinfo.txt', 'w') as hashinfo:
+        #    hashinfo.write(info_to_gui)
 
 
         with open(self.filename1, 'w') as f:
@@ -696,36 +714,22 @@ class Hash():
         evertsave_hashdict = json.loads(convertsave_hashdict)
 
 
-
-
-    def startHash(self):
-        self.fileName = self.Controller.GetFile()
-        print("This is our filename: " + self.fileName)
-        targetfile = Image.open(self.fileName, 'r')
-        
-        
-        comparison_hash = cryptohashingfunction(targetfile).__str__() #Variable for storing the hash, then converting it to a string object. 
-        self.matcher = self.match(comparison_hash) #Boolean for comparison use. 
-        
-        
-
-
     def sendhashinfo(self, hashesdict):
         if self.matcher is False:
             self.hashesdict['Hashmap']['Hashes']['Hash'].append(self.comparison_hash) #Adds hash to the end of the hash list. 
-            time.sleep(5)
+            time.sleep(1)
             return "There is no match for the hash in the dictionary. Hash has been added to dictionary."
         else:
-            proof = items_in(hashesdict['Hashmap']['Hashes']['Hash'])
-            length = len(proof)
-            for i in range(length):
-                if comparison_hash != proof[i]:
-                    continue
-                else:
-                    if self.hashesdict['Hashmap']['Hashes']['Info'][i] is None:
-                            return "There is no info about this hash."
-                    else:
-                        return hashesdict['Hashmap']['Hashes']['Info'][i]
+            proof = self.items_in(hashesdict['Hashmap']['Hashes']['Hash'])
+            #length = len(proof)
+            #for i in range(length):
+            #    if self.comparison_hash != proof[i]:
+            #        continue
+            #    else:
+            #        if self.hashesdict['Hashmap']['Hashes']['Info'][i] is None:
+            #                return "There is no info about this hash."
+            #        else:
+            #            return hashesdict['Hashmap']['Hashes']['Info'][i]
 
 
 
@@ -755,7 +759,7 @@ class Hash():
             return False
 
     # Determines the items that are in the selected key within the dictionary. 
-    def items_in(d):
+    def items_in(self, d):
         items = []
         if isinstance(d, list):
             items.extend(d)
