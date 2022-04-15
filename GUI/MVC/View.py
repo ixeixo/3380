@@ -29,7 +29,6 @@ class View(ttk.Frame):
         # set window title
         self.winfo_toplevel().title("Image Hashing Program")
 
-        fileName = ''
 
         # create widgets
         # label
@@ -63,11 +62,15 @@ class View(ttk.Frame):
     def set_controller(self, controller):
         self.Controller = controller
 
-        # hashify button
-    def hashify_button_clicked(self):
-        self.Controller.SendFile(self.fileName)
+
+
+
+    def set_file_name(self):
+        self.Controller.SetFile(self.fileName)
         
-       
+            # hashify button
+    def hashify_button_clicked(self):
+        self.Controller.SendFile()
         
         
         
@@ -191,6 +194,8 @@ class View(ttk.Frame):
         self.displayPreviewImage.image = self.previewImage
         self.displayPreviewImage.grid(row=4, column=2, pady=30)
         
+        self.set_file_name()
+
         if(self.outputUIPresent):
             self.destroyOutputDetails()
             self.outputUIPresent = False
