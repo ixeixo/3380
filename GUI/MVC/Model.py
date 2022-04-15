@@ -1,4 +1,4 @@
 class Model:
-    def __init__(self, email):
-        self.email = email
+    def __init__(self):
+        return
 
