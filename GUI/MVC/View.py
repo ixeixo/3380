@@ -75,7 +75,7 @@ class View(ttk.Frame):
         
         
         # Get matchfound result and replace the "false" below
-        if(False):
+        if(self.Controller.GetMatch()):
             # Match Found
             self.hashifyStatusLabel.configure(text="Image has been hashed. Match found!")
             self.readMatchInfo()
