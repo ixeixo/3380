@@ -19,6 +19,11 @@ class Controller:
 
 
     def GetMatch(self):
-        return
+        if(self.hash.matcher):
+            print("Match!")
+        else:
+            print("No Match!")
+        
+        return self.hash.matcher
 
 
