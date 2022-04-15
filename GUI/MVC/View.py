@@ -82,24 +82,24 @@ class View(ttk.Frame):
             # name
             self.imageNameMatch = ttk.Label(self.frameDetails, text="Image Name: ")
             self.imageNameMatch.grid(row=1, column=1, padx=5, sticky='w')
-            self.imageNameInputMatch = ttk.Label(self.frameDetails, text="")
+            self.imageNameInputMatch = ttk.Label(self.frameDetails, text=self.thing1)
             self.imageNameInputMatch.grid(row=1, column=2, padx=5, pady=5)
             # date
             self.imageDateMatch = ttk.Label(self.frameDetails, text="Date:")
             self.imageDateMatch.grid(row=2, column=1, padx=5, sticky='w')
-            self.imageDateLabelMatch = ttk.Label(self.frameDetails, text=date.today().strftime("%m/%d/%y"))
+            self.imageDateLabelMatch = ttk.Label(self.frameDetails, text=date.today().strftime(self.thing2))
             self.imageDateLabelMatch.grid(row=2, column=2, padx=5, pady=5, sticky='w')
             self.outDate = date.today().strftime("%m/%d/%y")
             # time
             self.imageTimeMatch = ttk.Label(self.frameDetails, text="Time:")
             self.imageTimeMatch.grid(row=3, column=1, padx=5, sticky='w')
-            self.imageTimeLabelMatch = ttk.Label(self.frameDetails, text=datetime.now().strftime("%H:%M:%S"))
+            self.imageTimeLabelMatch = ttk.Label(self.frameDetails, text=datetime.now().strftime(self.thing3))
             self.imageTimeLabelMatch.grid(row=3, column=2, padx=5, pady=5, sticky='w')
             self.outTime = datetime.now().strftime("%H:%M:%S")
             # description
             self.imageDescriptionMatch = ttk.Label(self.frameDetails, text="Description:")
             self.imageDescriptionMatch.grid(row=4, column=1, padx=5, sticky='nw')
-            self.imageDescriptionInputMatch = ttk.Label(self.frameDetails, text="")
+            self.imageDescriptionInputMatch = ttk.Label(self.frameDetails, text=self.thing4)
             self.imageDescriptionInputMatch.grid(row=4, column=2, padx=5, pady=5)
             
             self.outputUIPresent = True
@@ -145,10 +145,10 @@ class View(ttk.Frame):
 
     def readMatchInfo(self):
         matchFile = open('../testFile.txt', 'r')
-        thing1 = matchFile.readline()
-        thing2 = matchFile.readline()
-        thing3 = matchFile.readline()
-        thing4 = matchFile.readline()
+        self.thing1 = "The information has been found!"
+        self.thing2 = "The information has been found!"
+        self.thing3 = "The information has been found!"
+        self.thing4 = "The information has been found!"
 
        
 
