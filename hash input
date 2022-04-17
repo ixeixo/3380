@@ -1,0 +1,26 @@
+from collections import defaultdict
+import io
+import os
+from v import send
+#creates a file to write in and transfer data
+file = 'bloww.txt'
+#Constructs a dictionary for hash, data of hash
+hashesdict = defaultdict(lambda: defaultdict(lambda: defaultdict(list)))
+key = 1234
+key2 = 1111
+#arbitrary data for arbitrary keys just to show data if match is found
+hashesdict[key] = "this dude"
+hashesdict[key2] = "fasho"
+bro = hashesdict[key]
+bruh = hashesdict[key2]
+#opens a file and writes the data for a specific key or a match if found
+j = open(file, 'w')
+j.write(bro)
+j.close()
+#calls send from v file which symbolizes our controller then returns the newly saved data from the view or m in my case
+send(file)
+#opens the newly saved file and assigns the newly implemented data to the correct key assigning the new data to its proper key or hash function
+u = open(file, 'r')
+hashesdict[key] = u.read()
+print(hashesdict)
+
