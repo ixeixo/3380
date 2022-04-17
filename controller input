@@ -1,0 +1,8 @@
+#sends the file from the hash to the view
+def send(filename):
+    from m import openi
+    openi(filename)
+    j = open(filename,'r')
+    print(j.read())
+
+
