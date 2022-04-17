@@ -1,0 +1,11 @@
+
+#opens the file from the hash and allos for input then returns to the hash
+def openi(file):
+    j = open(file, 'r')
+    print(j.read())
+    data = input("input data: ")
+    j = open(file, 'a+')
+    j.write(data)
+    j.close
+    return j
+
