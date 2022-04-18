@@ -717,6 +717,12 @@ class Hash():
     def sendhashinfo(self, hashesdict):
         if self.matcher is False:
             self.hashesdict['Hashmap']['Hashes']['Hash'].append(self.comparison_hash) #Adds hash to the end of the hash list. 
+            key = self.comparison_hash
+            self.hashesdict[key]['Name'] = "N/A"
+            self.hashesdict[key]['Date'] = "N/A"
+            self.hashesdict[key]['Time'] = "N/A"
+            self.hashesdict[key]['Desc'] = "N/A"
+
             time.sleep(1)
             return "There is no match for the hash in the dictionary. Hash has been added to dictionary."
         else:
@@ -769,6 +775,32 @@ class Hash():
         else:
             raise ValueError('Unknown data')
         return items
+
+    def writeInfo(self):
+        #creates a file to write in and transfer data
+        self.detailFile = open('detailOut.txt', "r")
+        #Constructs a dictionary for hash, data of hash
+        self.infoName = self.detailFile.readline()
+        self.infoDate = self.detailFile.readline()
+        self.infoTime = self.detailFile.readline()
+        self.infoDesc = self.detailFile.readline()
+        #arbitrary data for arbitrary keys just to show data if match is found
+        key = self.comparison_hash
+        self.hashesdict[key]['Name'] = (self.infoName)
+        self.hashesdict[key]['Date'] = (self.infoDate)
+        self.hashesdict[key]['Time'] = (self.infoTime)
+        self.hashesdict[key]['Desc'] = (self.infoDesc)
+
+        print(key)
+        print("Name: " + self.hashesdict[key]['Name'])
+        print("Date: " + self.hashesdict[key]['Date'])
+        print("Time: " + self.hashesdict[key]['Time'])
+        print("Desc: " + self.hashesdict[key]['Desc'])
+
+    def getKey(self):
+        return self.comparison_hash
+
+
 
     
 
