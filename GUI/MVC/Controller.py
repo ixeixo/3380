@@ -26,4 +26,11 @@ class Controller:
         
         return self.hash.matcher
 
+    def sendback(self,file):
+        self.hash.saveinfotofile(file)
 
+    def writeInfo(self):
+        self.hash.writeInfo()
+
+    def getKey(self):
+        return self.hash.getKey()
