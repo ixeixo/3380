@@ -115,7 +115,7 @@ class View(ttk.Frame):
             self.imageName = ttk.Label(self.frameDetails, text="Image Name: ")
             self.imageName.grid(row=1, column=1, padx=5, sticky='w')
             self.imageNameInput = tk.Text(self.frameDetails, height=1, width=25)
-            self.imageNameInput.grid(row=1, column=2, padx=5, pady=5)
+            self.imageNameInput.grid(row=1, column=2, padx=5, pady=5, sticky='w')
             # date
             self.imageDate = ttk.Label(self.frameDetails, text="Date:")
             self.imageDate.grid(row=2, column=1, padx=5, sticky='w')
@@ -130,9 +130,9 @@ class View(ttk.Frame):
             self.outTime = datetime.now().strftime("%H:%M:%S")
             # description
             self.imageDescription = ttk.Label(self.frameDetails, text="Description:")
-            self.imageDescription.grid(row=4, column=1, padx=5, sticky='nw')
+            self.imageDescription.grid(row=4, column=1, padx=5, sticky='w')
             self.imageDescriptionInput = tk.Text(self.frameDetails, height=6, width=25)
-            self.imageDescriptionInput.grid(row=4, column=2, padx=5, pady=5)
+            self.imageDescriptionInput.grid(row=4, column=2, padx=5, pady=5, sticky='w')
         
             # Append new info button
             self.appendInfo_button = ttk.Button(self.frameDetails, text='Append New Info', width=30, command=self.appendInfo_button_clicked)
@@ -144,11 +144,23 @@ class View(ttk.Frame):
             self.inputUIPresent = True
 
     def readMatchInfo(self):
-        matchFile = open('../testFile.txt', 'r')
-        self.thing1 = "The information has been found!"
-        self.thing2 = "The information has been found!"
-        self.thing3 = "The information has been found!"
-        self.thing4 = "The information has been found!"
+        import json
+        #matchFile = open('../testFile.txt', 'r')
+        #self.thing1 = "The information has been found!"
+        #self.thing2 = "The information has been found!"
+        #self.thing3 = "The information has been found!"
+        #self.thing4 = "The information has been found!"
+        self.f = open ('./hashdictionary.json', "r")
+        # Reading from file
+        self.data = json.loads(self.f.read())
+        # Iterating through the json
+        # list
+        self.key = self.Controller.getKey()
+        self.thing1 = self.data[self.key]['Name']
+        self.thing2 = self.data[self.key]['Date']
+        self.thing3 = self.data[self.key]['Time']
+        self.thing4 = self.data[self.key]['Desc']
+ 
 
        
 
@@ -156,9 +168,11 @@ class View(ttk.Frame):
         # output txt file generation
         self.outName = self.imageNameInput.get(1.0, "end-1c")
         self.outDes = self.imageDescriptionInput.get(1.0, "end-1c")
-        OutputString = "Image Name: {}\nDate: {}\nTime: {}\nDescription: {}".format(self.outName, self.outDate, self.outTime, self.outDes)
+        OutputString = "{}\n{}\n{}\n{}\n".format(self.outName, self.outDate, self.outTime, self.outDes)
         with open('detailOut.txt', 'w') as f:
             f.write(OutputString)
+
+        self.Controller.writeInfo()
 
         self.appendInfoLabel.configure(text="Information Added!")
         self.appendInfo_button['state'] = DISABLED
@@ -194,6 +208,8 @@ class View(ttk.Frame):
         self.displayPreviewImage.image = self.previewImage
         self.displayPreviewImage.grid(row=4, column=2, pady=30)
         
+        self.hashifyStatusLabel.configure(text="")
+
         self.set_file_name()
 
         if(self.outputUIPresent):
